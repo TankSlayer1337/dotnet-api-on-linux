@@ -29,6 +29,7 @@ cd ../..
 sudo cp weather-forecast-ec2-user.service /etc/systemd/system/kestrel-exampleapp.service
 
 * Enable the service
+NOTE: this does not work right now. The app will not run unless you use "sudo dotnet ExampleWebAPI.dll"
 sudo systemctl enable kestrel-exampleapp.service
 
 * Start the service
