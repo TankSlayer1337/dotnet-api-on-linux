@@ -1,21 +1,32 @@
+## Manual steps through EC2 Instance Connect
+
 * Install git  
-sudo yum install git
-Add -y?
+sudo yum install git -y
 
 * Install dotnet sdk
-sudo yum install dotnet-sdk-6.0
+sudo yum install dotnet-sdk-6.0 -y
 
 * Clone repository
 git clone https://github.com/TankSlayer1337/dotnet-api-on-linux.git
 
 * Publish web app
+cd dotnet-api-on-linux/ExampleWebAPI/ExampleWebAPI
 dotnet publish --configuration Release
 
 * Copy the app into directory
-cp dotnet-api-on-linux/ExampleWebAPI/ExampleWebAPI/src/ExampleWebAPI/bin/Release/net6.0/publish/ExampleWebAPI.dll var/www/exampleapp
+NOTE: it seems like all files created during publish is required, not only the ExampleWebAPI.dll
+(first create the directory)
+sudo mkdir /var/www
+sudo mkdir /var/www/exampleapp
+sudo cp -a bin/Release/net6.0/publish/. /var/www/exampleapp/
+
+* Set port environment variables
+export ASPNETCORE_HTTP_PORTS="80;8080"
+export ASPNETCORE_HTTPS_PORTS="443;8081"
 
 * Copy the service file
-cp dotnet-api-on-linux/weather-forecast-ec2-user.service /etc/systemd/system/kestrel-exampleapp.service
+cd ../..
+sudo cp weather-forecast-ec2-user.service /etc/systemd/system/kestrel-exampleapp.service
 
 * Enable the service
 sudo systemctl enable kestrel-exampleapp.service
