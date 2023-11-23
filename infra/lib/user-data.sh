@@ -5,13 +5,13 @@ python3 -m venv /opt/certbot/
 /opt/certbot/bin/pip install --upgrade pip
 /opt/certbot/bin/pip install certbot
 ln -s /opt/certbot/bin/certbot /usr/bin/certbot
-certbot certonly --standalone --server https://acme-staging-v02.api.letsencrypt.org/directory -n -d weather.cloudchaotic.com -m erikandresall@gmail.com --agree-tos --keep
+certbot certonly --standalone -n -d weather.cloudchaotic.com -m erikandresall@gmail.com --agree-tos --keep
 
 yum install git -y
 yum install dotnet-sdk-6.0 -y
 git clone https://github.com/TankSlayer1337/dotnet-api-on-linux.git
 cd dotnet-api-on-linux/ExampleWebAPI/ExampleWebAPI
-# dotnet publish will fail if DOTNET_CLI_HOME is not set
+# dotnet publish will fail if DOTNET_CLI_HOME is not set 
 export DOTNET_CLI_HOME=/tmp
 dotnet publish --configuration Release
 mkdir /var/www
