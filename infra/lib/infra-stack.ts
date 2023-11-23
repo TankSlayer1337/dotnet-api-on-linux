@@ -62,6 +62,6 @@ export class InfraStack extends cdk.Stack {
       recordName: 'weather',
       target: RecordTarget.fromIpAddresses(elasticIp.attrPublicIp),
       ttl: cdk.Duration.seconds(0) // not ideal
-    })
+    }).applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
   }
 }
