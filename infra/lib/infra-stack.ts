@@ -1,5 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { Construct } from 'constructs';
 import { readFileSync } from 'fs';
 
@@ -26,7 +27,7 @@ export class InfraStack extends cdk.Stack {
       ec2.Port.tcp(443),
       'Allow HTTPS traffic from anywhere'
     );
-    // SSH ingress rule required for EC2 Instance Connect
+    // SSH ingress rule required for EC2 Instance Connect. Not recommended to have from any IPv4 in production.
     securityGroup.addIngressRule(
       ec2.Peer.anyIpv4(),
       ec2.Port.tcp(22),
@@ -52,6 +53,15 @@ export class InfraStack extends cdk.Stack {
       allocationId: elasticIp.attrAllocationId,
       instanceId: ec2Instance.instanceId
     });
+
+    const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
+      domainName: 'cloudchaotic.com'
+    });
+    new ARecord(this, 'ARecord', {
+      zone: hostedZone,
+      recordName: 'weather',
+      target: RecordTarget.fromIpAddresses(elasticIp.attrPublicIp),
+      ttl: cdk.Duration.seconds(0) // not ideal
+    })
   }
 }
-
